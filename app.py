@@ -32,12 +32,33 @@ app = Flask(__name__)
 # Load model
 model = tf.keras.models.load_model('inceptionv3_face_model_32_50_0001.h5')
 
-# Mapping index kelas ke nama asli
-kelas_ke_nama = [
-    'Aggasi', 'Akbar', 'Apri', 'Ari', 'Bellza', 'Darimi', 'Doni', 'Gilang',
-    'Heppy', 'Heri', 'Holidy', 'Irvan', 'Julia', 'Meylin', 'Muzartun',
-    'Nofri', 'Rangga', 'Rinaldi', 'Riska', 'Sandy', 'Solihin', 'Sonia',
-    'Wahyu', 'Yudi', 'Yusuf'
+# Mapping kelas ke nama dan kode karyawan
+kelas_ke_info = [
+    {'nama': 'Aggasi',   'kode': 'K001'},
+    {'nama': 'Akbar',    'kode': 'K002'},
+    {'nama': 'Apri',     'kode': 'K003'},
+    {'nama': 'Ari',      'kode': 'K004'},
+    {'nama': 'Bellza',   'kode': 'K005'},
+    {'nama': 'Darimi',   'kode': 'K006'},
+    {'nama': 'Doni',     'kode': 'K007'},
+    {'nama': 'Gilang',   'kode': 'K008'},
+    {'nama': 'Heppy',    'kode': 'K009'},
+    {'nama': 'Heri',     'kode': 'K010'},
+    {'nama': 'Holidy',   'kode': 'K011'},
+    {'nama': 'Irvan',    'kode': 'K012'},
+    {'nama': 'Julia',    'kode': 'K013'},
+    {'nama': 'Meylin',   'kode': 'K014'},
+    {'nama': 'Muzartun', 'kode': 'K015'},
+    {'nama': 'Nofri',    'kode': 'K016'},
+    {'nama': 'Rangga',   'kode': 'K017'},
+    {'nama': 'Rinaldi',  'kode': 'K018'},
+    {'nama': 'Riska',    'kode': 'K019'},
+    {'nama': 'Sandy',    'kode': 'K020'},
+    {'nama': 'Solihin',  'kode': 'K021'},
+    {'nama': 'Sonia',    'kode': 'K022'},
+    {'nama': 'Wahyu',    'kode': 'K023'},
+    {'nama': 'Yudi',     'kode': 'K024'},
+    {'nama': 'Yusuf',    'kode': 'K025'}
 ]
 
 @app.route('/prediksi', methods=['POST'])
@@ -48,14 +69,22 @@ def prediksi():
 
     pred = model.predict(img)
     kelas = int(np.argmax(pred))
-    nama = kelas_ke_nama[kelas] if kelas < len(kelas_ke_nama) else "Tidak diketahui"
+    confidence = float(np.max(pred))
+
+    if kelas < len(kelas_ke_info):
+        nama = kelas_ke_info[kelas]['nama']
+        kode = kelas_ke_info[kelas]['kode']
+    else:
+        nama = 'Tidak diketahui'
+        kode = 'N/A'
 
     return jsonify({
         'kelas': kelas,
         'nama': nama,
-        'confidence': float(np.max(pred))  # optional: tambahkan kepercayaan
+        'kode_karyawan': kode,
+        'confidence': confidence
     })
 
-# Fungsi utama untuk menjalankan Flask
+# Fungsi utama
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
