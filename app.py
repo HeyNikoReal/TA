@@ -344,9 +344,9 @@ def prediksi():
         kode = kelas_ke_info[kelas]['kode']
 
         # (Opsional) Catat absensi ke file log
-        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        with open("log_absensi.txt", "a") as f:
-            f.write(f"{timestamp} | {kode} | {nama} | hadir\n")
+        # timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        # with open("log_absensi.txt", "a") as f:
+        #     f.write(f"{timestamp} | {kode} | {nama} | hadir\n")
 
         return jsonify({
             'status': 'sukses',
