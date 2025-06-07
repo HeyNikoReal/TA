@@ -420,7 +420,7 @@ def crop_face_mtcnn(img_pil, output_size=(299, 299)):
     x, y, w, h = faces[0]['box']
     x1, y1 = abs(x), abs(y) # Menghindari nilai negatif
     x2, y2 = x1 + w, y1 + h
-    face_crop = img_np[y1:y2, x1:x2]
+    face_crop = img_array[y1:y2, x1:x2]
     face_img = Image.fromarray(face_crop).resize(output_size)
     return face_img
 
@@ -438,7 +438,8 @@ def prediksi():
         if wajah is None:
             return jsonify({'status': 'gagal', 'error': 'Wajah tidak terdeteksi'}), 400
 
-        wajah_normalized = np.expand_dims(wajah / 255.0, axis=0)
+        wajah_array = np.array(wajah) / 255.0
+        wajah_normalized = np.expand_dims(wajah_array, axis=0)
 
         # Prediksi
         pred = model.predict(wajah_normalized)
