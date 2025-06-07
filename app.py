@@ -455,7 +455,7 @@ def prediksi():
             'status': 'sukses',
             'kelas': kelas,
             'nama': info['nama'],
-            'id': info['kode'],
+            'id': info['id'],
             'confidence': round(confidence, 4)
         })
 
