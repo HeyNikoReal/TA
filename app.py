@@ -407,6 +407,8 @@ kelas_ke_info = [
     {'nama': 'Yusuf', 'id': '025'}
 ]
 
+detector = MTCNN()
+
 # Fungsi crop wajah menggunakan MTCNN
 def crop_face_mtcnn(img_pil, output_size=(299, 299)):
     img_np = np.array(img_pil)
@@ -425,8 +427,6 @@ def crop_face_mtcnn(img_pil, output_size=(299, 299)):
 @app.route('/prediksi', methods=['POST'])
 def prediksi():
     try:
-        detector = MTCNN()
-
         # Ambil file gambar dari request
         file = request.files.get('gambar')
         if not file:
