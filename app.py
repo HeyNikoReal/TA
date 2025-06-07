@@ -264,100 +264,204 @@
 # if __name__ == '__main__':
 #     app.run(debug=True)
 
+
+# Import library
+# from flask import Flask, request, jsonify
+# import tensorflow as tf
+# import numpy as np
+# from PIL import Image
+# from mtcnn import MTCNN
+# import cv2
+# import datetime
+
+# app = Flask(__name__)
+
+# # Load model yang dipilih
+# model = tf.keras.models.load_model('inceptionv3_face_model_32_50_0001.h5')
+# detector = MTCNN()
+
+# # Mapping kelas ke nama dan kode karyawan
+# kelas_ke_info = [
+#     {'nama': 'Aggasi', 'kode': 'K001'},
+#     {'nama': 'Andira', 'kode': 'K002'},
+#     {'nama': 'Apri', 'kode': 'K003'},
+#     {'nama': 'Ariko','kode': 'K004'},
+#     {'nama': 'Benny', 'kode': 'K005'},
+#     {'nama': 'Darimi', 'kode': 'K006'},
+#     {'nama': 'Dermosis', 'kode': 'K007'},
+#     {'nama': 'Dicky',   'kode': 'K008'},
+#     {'nama': 'Doni',     'kode': 'K009'},
+#     {'nama': 'Gilang',   'kode': 'K010'},
+#     {'nama': 'Heppy',    'kode': 'K011'},
+#     {'nama': 'Heri',     'kode': 'K012'},
+#     {'nama': 'Holidy',   'kode': 'K013'},
+#     {'nama': 'Irvan',    'kode': 'K014'},
+#     {'nama': 'Muzartun', 'kode': 'K015'},
+#     {'nama': 'Nofri',    'kode': 'K016'},
+#     {'nama': 'Rangga',   'kode': 'K017'},
+#     {'nama': 'Nuryanto',  'kode': 'K018'},
+#     {'nama': 'Rafi',    'kode': 'K019'},
+#     {'nama': 'Rangga',    'kode': 'K020'},
+#     {'nama': 'Ricky',  'kode': 'K021'},
+#     {'nama': 'Sandy',    'kode': 'K022'},
+#     {'nama': 'Solihin',    'kode': 'K023'},
+#     {'nama': 'Wahyu',     'kode': 'K024'},
+#     {'nama': 'Yusuf',    'kode': 'K025'}
+# ]
+
+# @app.route('/prediksi', methods=['POST'])
+# def prediksi():
+#         file = request.files['gambar']
+#         img_pil = Image.open(file.stream).convert('RGB')
+#         img_np = np.array(img_pil)
+
+#         # Deteksi wajah
+#         faces = detector.detect_faces(img_np)
+#         if not faces:
+#             return jsonify({'status': 'gagal', 'error': 'Wajah tidak terdeteksi'}), 400
+
+#         # Ambil wajah pertama
+#         x, y, w, h = faces[0]['box']
+#         x, y = max(0, x), max(0, y)  # Hindari koordinat negatif
+#         face_crop = img_np[y:y+h, x:x+w]
+
+#         # Resize ke ukuran input model
+#         face_resized = cv2.resize(face_crop, (299, 299))
+#         face_normalized = np.expand_dims(face_resized / 255.0, axis=0)
+
+#         # Prediksi
+#         pred = model.predict(face_normalized)
+#         kelas = int(np.argmax(pred))
+#         confidence = float(np.max(pred))
+#         threshold = 0.80
+
+#         if kelas >= len(kelas_ke_info):
+#             return jsonify({'status': 'gagal', 'error': 'Kelas tidak dikenali oleh sistem'}), 400
+
+#         # if confidence < threshold:
+#         #     return jsonify({'status': 'gagal', 'error': 'Prediksi tidak meyakinkan', 'confidence': confidence}), 400
+
+#         # Ambil data karyawan
+#         nama = kelas_ke_info[kelas]['nama']
+#         kode = kelas_ke_info[kelas]['kode']
+
+#         # (Opsional) Catat absensi ke file log
+#         # timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+#         # with open("log_absensi.txt", "a") as f:
+#         #     f.write(f"{timestamp} | {kode} | {nama} | hadir\n")
+
+#         return jsonify({
+#             'status': 'sukses',
+#             'kelas': kelas,
+#             'nama': nama,
+#             'kode_karyawan': kode,
+#             'confidence': round(confidence, 4)
+#         })
+
+#     # except Exception as e:
+#     #     return jsonify({'status': 'gagal', 'error': str(e)}), 500
+
+# if __name__ == '__main__':
+#     app.run(host='0.0.0.0', port=5000)
+
+
+# Import Library 
 from flask import Flask, request, jsonify
 import tensorflow as tf
 import numpy as np
 from PIL import Image
 from mtcnn import MTCNN
 import cv2
-import datetime
 
 app = Flask(__name__)
 
-# Load model
-model = tf.keras.models.load_model('inceptionv3_face_model_32_50_0001.h5')
-detector = MTCNN()
+# Load model 
+model = tf.keras.models.load_model('16_50_0001.h5')
 
 # Mapping kelas ke nama dan kode karyawan
 kelas_ke_info = [
-    {'nama': 'Aggasi',   'kode': 'K001'},
-    {'nama': 'Akbar',    'kode': 'K002'},
-    {'nama': 'Apri',     'kode': 'K003'},
-    {'nama': 'Ari',      'kode': 'K004'},
-    {'nama': 'Bellza',   'kode': 'K005'},
-    {'nama': 'Darimi',   'kode': 'K006'},
-    {'nama': 'Doni',     'kode': 'K007'},
-    {'nama': 'Gilang',   'kode': 'K008'},
-    {'nama': 'Heppy',    'kode': 'K009'},
-    {'nama': 'Heri',     'kode': 'K010'},
-    {'nama': 'Holidy',   'kode': 'K011'},
-    {'nama': 'Irvan',    'kode': 'K012'},
-    {'nama': 'Julia',    'kode': 'K013'},
-    {'nama': 'Meylin',   'kode': 'K014'},
-    {'nama': 'Muzartun', 'kode': 'K015'},
-    {'nama': 'Nofri',    'kode': 'K016'},
-    {'nama': 'Rangga',   'kode': 'K017'},
-    {'nama': 'Rinaldi',  'kode': 'K018'},
-    {'nama': 'Riska',    'kode': 'K019'},
-    {'nama': 'Sandy',    'kode': 'K020'},
-    {'nama': 'Solihin',  'kode': 'K021'},
-    {'nama': 'Sonia',    'kode': 'K022'},
-    {'nama': 'Wahyu',    'kode': 'K023'},
-    {'nama': 'Yudi',     'kode': 'K024'},
-    {'nama': 'Yusuf',    'kode': 'K025'}
+    {'nama': 'Aggasi', 'id': '001'},
+    {'nama': 'Andira', 'id': '002'},
+    {'nama': 'Apri', 'id': '003'},
+    {'nama': 'Ariko', 'id': '004'},
+    {'nama': 'Benny', 'id': '005'},
+    {'nama': 'Darimi', 'id': '006'},
+    {'nama': 'Dermosis', 'id': '007'},
+    {'nama': 'Dicky', 'id': '008'},
+    {'nama': 'Doni', 'id': '009'},
+    {'nama': 'Gilang', 'id': '010'},
+    {'nama': 'Heppy', 'id': '011'},
+    {'nama': 'Heri', 'id': '012'},
+    {'nama': 'Holidy', 'id': '013'},
+    {'nama': 'Irvan', 'id': '014'},
+    {'nama': 'Muzartun', 'id': '015'},
+    {'nama': 'Nofri', 'id': '016'},
+    {'nama': 'Rangga', 'id': '017'},
+    {'nama': 'Nuryanto', 'id': '018'},
+    {'nama': 'Rafi', 'id': '019'},
+    {'nama': 'Rangga', 'id': '020'},
+    {'nama': 'Ricky', 'id': '021'},
+    {'nama': 'Sandy', 'id': '022'},
+    {'nama': 'Solihin', 'id': '023'},
+    {'nama': 'Wahyu', 'id': '024'},
+    {'nama': 'Yusuf', 'id': '025'}
 ]
+
+# Fungsi crop wajah menggunakan MTCNN
+def crop_face_mtcnn(img_pil, output_size=(299, 299)):
+    img_np = np.array(img_pil)
+    faces = detector.detect_faces(img_np)
+
+    if not faces:
+        return None  # Tidak ada wajah terdeteksi
+
+    x, y, w, h = faces[0]['box']
+    x1, y1 = abs(x), abs(y) # Menghindari nilai negatif
+    x2, y2 = x1 + w, y1 + h
+    face_crop = img_array[y1:y2, x1:x2]
+    face_img = Image.fromarray(face_crop).resize(output_size)
+    return face_img
 
 @app.route('/prediksi', methods=['POST'])
 def prediksi():
-        file = request.files['gambar']
-        img_pil = Image.open(file.stream).convert('RGB')
-        img_np = np.array(img_pil)
+    try:
+        detector = MTCNN()
 
-        # Deteksi wajah
-        faces = detector.detect_faces(img_np)
-        if not faces:
+        # Ambil file gambar dari request
+        file = request.files.get('gambar')
+        if not file:
+            return jsonify({'status': 'gagal', 'error': 'File gambar tidak ditemukan'}), 400
+
+        img_pil = Image.open(file.stream).convert('RGB')
+        wajah = crop_face_mtcnn(img_pil)
+
+        if wajah is None:
             return jsonify({'status': 'gagal', 'error': 'Wajah tidak terdeteksi'}), 400
 
-        # Ambil wajah pertama
-        x, y, w, h = faces[0]['box']
-        x, y = max(0, x), max(0, y)  # Hindari koordinat negatif
-        face_crop = img_np[y:y+h, x:x+w]
-
-        # Resize ke ukuran input model
-        face_resized = cv2.resize(face_crop, (299, 299))
-        face_normalized = np.expand_dims(face_resized / 255.0, axis=0)
+        wajah_normalized = np.expand_dims(wajah / 255.0, axis=0)
 
         # Prediksi
-        pred = model.predict(face_normalized)
+        pred = model.predict(wajah_normalized)
         kelas = int(np.argmax(pred))
         confidence = float(np.max(pred))
-        threshold = 0.80
 
         if kelas >= len(kelas_ke_info):
-            return jsonify({'status': 'gagal', 'error': 'Kelas tidak dikenali oleh sistem'}), 400
+            return jsonify({'status': 'gagal', 'error': 'Kelas tidak dikenali'}), 400
 
-        # if confidence < threshold:
-        #     return jsonify({'status': 'gagal', 'error': 'Prediksi tidak meyakinkan', 'confidence': confidence}), 400
-
-        # Ambil data karyawan
-        nama = kelas_ke_info[kelas]['nama']
-        kode = kelas_ke_info[kelas]['kode']
-
-        # (Opsional) Catat absensi ke file log
-        # timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        # with open("log_absensi.txt", "a") as f:
-        #     f.write(f"{timestamp} | {kode} | {nama} | hadir\n")
+        info = kelas_ke_info[kelas]
 
         return jsonify({
             'status': 'sukses',
             'kelas': kelas,
-            'nama': nama,
-            'kode_karyawan': kode,
+            'nama': info['nama'],
+            'id': info['kode'],
             'confidence': round(confidence, 4)
         })
 
-    # except Exception as e:
-    #     return jsonify({'status': 'gagal', 'error': str(e)}), 500
+    except Exception as e:
+        return jsonify({'status': 'gagal', 'error': str(e)}), 500
 
 if __name__ == '__main__':
+    # Untuk akses publik via IP VM
     app.run(host='0.0.0.0', port=5000)
+
