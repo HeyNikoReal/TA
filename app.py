@@ -461,7 +461,7 @@ def prediksi():
             'kelas': kelas,
             'nama': info['nama'],
             'id': info['id'],
-            'confidence': round(confidence, 4)
+            'confidence': round(confidence, 4),
             'processing_time': processing_time
         })
 
