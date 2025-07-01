@@ -428,7 +428,7 @@ def crop_face_mtcnn(img_pil, output_size=(299, 299)):
 @app.route('/prediksi', methods=['POST'])
 def prediksi():
     try:
-        start_time = time.time() 
+        # start_time = time.time() 
         # Ambil file gambar dari request
         file = request.files.get('gambar')
         if not file:
@@ -453,8 +453,8 @@ def prediksi():
 
         info = kelas_ke_info[kelas]
 
-        end_time = time.time() 
-        processing_time = round(end_time - start_time, 4)
+        # end_time = time.time() 
+        # processing_time = round(end_time - start_time, 4)
 
         return jsonify({
             'status': 'sukses',
@@ -462,7 +462,7 @@ def prediksi():
             'nama': info['nama'],
             'id': info['id'],
             'confidence': round(confidence, 4),
-            'processing_time': processing_time
+            # 'processing_time': processing_time
         })
 
     except Exception as e:
