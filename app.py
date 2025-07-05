@@ -7,7 +7,7 @@ from PIL import Image
 from mtcnn import MTCNN
 import cv2
 
-app = Flask_(_name__)
+app = Flask(__name__)
 
 # Load model 
 model = tf.keras.models.load_model('16_50_0001.h5')
