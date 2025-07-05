@@ -7,7 +7,7 @@ from PIL import Image
 from mtcnn import MTCNN
 import cv2
 
-app = Flask(_name_)
+app = Flask_(_name__)
 
 # Load model 
 model = tf.keras.models.load_model('16_50_0001.h5')
@@ -101,6 +101,6 @@ def prediksi():
     except Exception as e:
         return jsonify({'status': 'gagal', 'error': str(e)}), 500
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     # Untuk akses publik via IP VM
     app.run(host='0.0.0.0', port=5000)
