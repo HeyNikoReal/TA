@@ -145,7 +145,8 @@ kelas_ke_info = [
     {'nama': 'Sandy', 'id': '022'},
     {'nama': 'Solihin', 'id': '023'},
     {'nama': 'Wahyu', 'id': '024'},
-    {'nama': 'Yusuf', 'id': '025'}
+    {'nama': 'Yusuf', 'id': '025'},
+    {'nama': 'ZNicholas', 'id': '026'}
 ]
 
 detector = MTCNN()
