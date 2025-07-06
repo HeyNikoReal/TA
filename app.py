@@ -116,7 +116,7 @@ import cv2
 app = Flask(__name__)
 
 # === Load Models ===
-model_recog = tf.keras.models.load_model('16_50_0001.h5')  # face recognition
+model_recog = tf.keras.models.load_model('modelku.h5')  # face recognition
 sess_fas = onnxruntime.InferenceSession('modelrgb.onnx', providers=['CPUExecutionProvider'])  # anti-spoofing
 
 # === Mapping nama karyawan ===
